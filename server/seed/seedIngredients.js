@@ -7,7 +7,7 @@ const ingredients = require("./ingredients");
 mongoose.connect(process.env.MONGO_URI).then(async () => {
     console.log("Connected to MongoDb");
 
-    await Ingredient.deleteMany
+    await Ingredient.deleteMany();
     await Ingredient.insertMany(ingredients);
 
     console.log("Ingredients seeded");
