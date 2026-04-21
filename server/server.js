@@ -1,5 +1,6 @@
 const express = require("express");
 const moongoose = require("mongoose")
+const Ingredient = require("./models/Ingredient");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
 require("dotenv").config();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ message: "API is running" });
 });
+
 
 mongoose
     .connect(process.env.MONGO_URI).then (()=>{
