@@ -1,6 +1,35 @@
 const mongoose = require("mongoose");
 const Recipe = require("../models/Recipe");
+const Ingredient = require("../models/Ingredient");
 require("../models/User");
+
+const calculateNutrition = async (ingredients) => {
+    let totalCalories = 0;
+    let totalProtein = 0;
+    let totalCarbs = 0;
+    let totalFat = 0;
+
+    for (const item of ingredients) {
+        const ingredient = await Ingredient.findById(item.ingredientId);
+
+        if (!ingredient) {
+            throw new Error("Ingredient not found");
+        }
+        const multiplier = item.amount / 100;
+
+        totalCalories += ingredient.caloriesPer100g * multiplier;
+        totalProtein += ingredient.proteinPer100g * multiplier;
+        totalCarbs += ingredient.carbsPer100g * multiplier;
+        totalFat += ingredient.fatPer100g * multiplier;
+    }
+
+    return {
+        totalCalories: Math.round(totalCalories),
+        totalProtein: Math.round(totalProtein),
+        totalCarbs: Math.round(totalCarbs),
+        totalFat: Math.round(totalFat)
+    };      
+}
 
 const validateRecipeInput = (body) => {
     const {
@@ -8,11 +37,7 @@ const validateRecipeInput = (body) => {
         instructions,
         servings,
         userId,
-        ingredients,
-        totalCalories,
-        totalProtein,
-        totalCarbs,
-        totalFat
+        ingredients
     } = body;
 
     if (!title || typeof title !== "string") {
@@ -44,20 +69,6 @@ const validateRecipeInput = (body) => {
             return "Each ingredient amount must be a number >= 0";
         }
     }
-
-    if (
-        typeof totalCalories !== "number" ||
-        typeof totalProtein !== "number" ||
-        typeof totalCarbs !== "number" ||
-        typeof totalFat !== "number" ||
-        totalCalories < 0 ||
-        totalProtein < 0 ||
-        totalCarbs < 0 ||
-        totalFat < 0
-    ) {
-        return "Nutrition values must be numbers greater than or equal to 0";
-    }
-
 
     return null;
 };
@@ -93,8 +104,18 @@ const getRecipeById = async (req, res) => {
         if (!recipe) {
             return res.status(404).json({ error: "Recipe not found" });
         }
+        const recipeObject = recipe.toObject();
 
-        res.json(recipe);
+        const recipePerServing = {
+            ...recipeObject,
+            caloriesPerServing: Math.round(recipe.totalCalories / recipe.servings),
+            proteinPerServing: Math.round(recipe.totalProtein / recipe.servings),
+            carbsPerServing: Math.round(recipe.totalCarbs / recipe.servings),
+            fatPerServing: Math.round(recipe.totalFat / recipe.servings)
+        };
+
+        res.json(recipePerServing);
+        
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -107,14 +128,21 @@ const createRecipe = async (req, res) => {
             return res.status(400).json({ error: validationError });
         }
 
-
-        const recipe = new Recipe(req.body);
+        const nutrition = await calculateNutrition(req.body.ingredients);
+        
+        const recipe = new Recipe({
+            ...req.body, 
+            ...nutrition});
         const savedRecipe = await recipe.save();
 
         res.status(201).json(savedRecipe);
     } catch (error) {
+        if (error.message === "Recipe not found") {
+            return res.status(404).json({ error: error.message });
+        }
+
         if (error.code === 11000) {
-            return res.status(409).json({ error: "Ingredient already exists" });
+            return res.status(409).json({ error: "Recipe already exists" });
         }
         if (error.name === "ValidationError") {
             return res.status(400).json({ error: error.message });
@@ -132,9 +160,14 @@ const updateRecipe = async (req, res) => {
         if (validationError) {
             return res.status(400).json({ error: validationError });
         }
+
+        const nutrition = await calculateNutrition(req.body.ingredients);
+
         const updatedRecipe = await Recipe.findByIdAndUpdate(
-            req.params.id,
-            req.body,
+            req.params.id,{
+              ...req.body, 
+              ...nutrition 
+            },
             { returnDocument: "after", runValidators: true  }
         );
 
@@ -144,6 +177,9 @@ const updateRecipe = async (req, res) => {
 
         res.json(updatedRecipe);
     } catch (error) {
+        if (error.message === "Ingredient not found") {
+            return res.status(404).json({ error: error.message });
+        }
         if (error.code === 11000) {
             return res.status(409).json({ error: "Recipe already exists" });
         }
