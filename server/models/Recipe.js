@@ -4,7 +4,8 @@ const recipeSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    unique: true
   },
     instructions: {
     type: String,
@@ -49,7 +50,7 @@ const recipeSchema = new mongoose.Schema({
     required: true,
     min: 0
     },
-    totalFats: {
+    totalFat: {
     type: Number,
     required: true,
     min: 0
