@@ -23,7 +23,13 @@ const createUser = async (req, res) => {
             return res.status(400).json({ error: "Name and email required" });
         }
 
-        const user = new User({ name, email });
+        let user = await User.findOne({ email });
+
+        if (user) {
+            return res.json(user);
+        }
+
+        user = new User({ name, email });
         const savedUser = await user.save();
 
         res.status(201).json(savedUser);

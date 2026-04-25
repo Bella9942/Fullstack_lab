@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function CreateRecipe() {
+function CreateRecipe({ user }) {
     const [title, setTitle] = useState("");
     const [instructions, setInstructions] = useState("");
     const [servings, setServings] = useState(1);
-    const [userId, setUserId] = useState("");
-    
+
     const [ingredientId, setIngredientId] = useState("");
-    const [amount, setAmount] = useState(0);
+    const [ingredientsList, setIngredientsList] = useState([]);
+    const [amount, setAmount] = useState(1);
+
+    useEffect(() => {
+        const fetchIngredients = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/ingredients");
+            const data = await response.json();
+            setIngredientsList(data);
+        } catch (error) {
+            console.error(error);
+        }
+        };
+
+        fetchIngredients();
+    }, []);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +35,7 @@ function CreateRecipe() {
                         title,
                         instructions,
                         servings,
-                        userId,
+                        userId: user._id,
                         ingredients: [
                             {
                                 ingredientId,
@@ -60,12 +74,15 @@ function CreateRecipe() {
             <input type="number" placeholder="Servings" value={servings} onChange={(e) => setServings(Number(e.target.value))}/>
             </div>
 
-            <div>
-                <input type="text" placeholder="User ID" value={userId} onChange={(e) => setUserId(e.target.value)}/>
-            </div>
-            <div>
-                <input type="text" placeholder="Ingredient ID" value={ingredientId} onChange={(e) => setIngredientId(e.target.value)}/>
-                </div>
+            <p>Recipe will be created by: {user.name}</p>
+                <select value={ingredientId} onChange={(e) => setIngredientId(e.target.value)}>
+                <option value="">Select ingredient</option>
+                {ingredientsList.map((ingredient) => (
+                    <option key={ingredient._id} value={ingredient._id}>
+                    {ingredient.name}
+                    </option>
+                ))}
+            </select>
 
             <div>
                 <input type="number" placeholder="Amount (grams)" value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>

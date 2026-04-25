@@ -37,7 +37,10 @@ function RecipeList() {
                 <h3>{recipe.title}</h3>
                 <p>Servings: {recipe.servings}</p>
                 <p>Calories: {recipe.totalCalories}</p> 
-            
+                <p>Protein: {recipe.totalProtein}</p>
+                <p>Carbs: {recipe.totalCarbs}</p>
+                <p>Fat: {recipe.totalFat}</p> 
+                <p>Created by: {recipe.userId?.name}</p>
             </div>
         ))}
         </div>
