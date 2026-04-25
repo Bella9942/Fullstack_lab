@@ -2,6 +2,7 @@ const express = require("express");
 const moongoose = require("mongoose")
 const Ingredient = require("./models/Ingredient");
 const recipeRoutes = require("./routes/recipeRoutes");
+const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
 const ingredientRoutes = require("./routes/ingredientsRoutes");
@@ -14,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/ingredients", ingredientRoutes);
 app.use("/api/recipes", recipeRoutes);
+app.use("/api/users", userRoutes);
+
 app.get("/", (req, res) => {
   res.json({ message: "API is running" });
 });
