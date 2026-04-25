@@ -85,7 +85,7 @@ const getAllRecipes = async (req, res) => {
             return res.status(404).json({ error: "No recipes found" });
         }
 
-        res.json(recipes);
+        return res.json(recipes);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -114,8 +114,8 @@ const getRecipeById = async (req, res) => {
             fatPerServing: Math.round(recipe.totalFat / recipe.servings)
         };
 
-        res.json(recipePerServing);
-        
+        return res.json(recipePerServing);
+
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -135,9 +135,9 @@ const createRecipe = async (req, res) => {
             ...nutrition});
         const savedRecipe = await recipe.save();
 
-        res.status(201).json(savedRecipe);
+        return res.status(201).json(savedRecipe);
     } catch (error) {
-        if (error.message === "Recipe not found") {
+        if (error.message === "Ingredient not found") {
             return res.status(404).json({ error: error.message });
         }
 
@@ -175,7 +175,7 @@ const updateRecipe = async (req, res) => {
             return res.status(404).json({ error: "Recipe not found" });
         }
 
-        res.json(updatedRecipe);
+        return res.json(updatedRecipe);
     } catch (error) {
         if (error.message === "Ingredient not found") {
             return res.status(404).json({ error: error.message });
@@ -202,7 +202,7 @@ const deleteRecipe = async (req, res) => {
             return res.status(404).json({ error: "Recipe not found" });
         }
 
-        res.json({ message: "Recipe deleted" });
+        return res.json({ message: "Recipe deleted" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -222,7 +222,7 @@ const getRecipeIngredients = async (req, res) => {
             return res.status(404).json({ error: "Recipe not found" });
         }
 
-        res.json(recipe.ingredients);
+        return res.json(recipe.ingredients);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -241,7 +241,7 @@ const getRecipesByUser = async (req, res) => {
             return res.status(404).json({ error: "No recipes found for this user" });
         }
 
-        res.json(recipes);
+       return res.json(recipes);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
