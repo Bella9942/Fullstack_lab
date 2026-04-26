@@ -9,6 +9,11 @@ function App() {
   const [user, setUser] = useState(null);
   const [ingredientRefresh, setIngredientRefresh] = useState(0);
 
+  const [recipeRefresh, setRecipeRefresh] = useState(0);
+  const refreshRecipes = () => {
+    setRecipeRefresh((prev) => prev + 1);
+  };
+
   const refreshIngredients = () => {
     console.log("refreshIngredients called");
     setIngredientRefresh((prev) => prev + 1);
@@ -36,9 +41,10 @@ function App() {
 
             <button onClick={handleLogout}>Logout</button>
           <CreateIngredient onIngredientCreated={refreshIngredients} />
-          <CreateRecipe user={user} ingredientRefresh={ingredientRefresh} />
+          <CreateRecipe user={user} ingredientRefresh={ingredientRefresh} onRecipeCreated={refreshRecipes}/>
+
           <IngredientList ingredientRefresh={ingredientRefresh} onIngredientChanged={refreshIngredients} />
-          <RecipeList />
+          <RecipeList recipeRefresh={recipeRefresh} />
         </div>
       );
 };

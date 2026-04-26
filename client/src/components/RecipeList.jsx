@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function RecipeList() {
+function RecipeList({ recipeRefresh }) {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -9,29 +9,32 @@ function RecipeList() {
     const [editData, setEditData] = useState({});
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/recipes")
-        .then((response) => {
-            if (!response.ok){
-                throw new Error("Could not fetch recipes")
-            }
-            return response.json()
-    })        
-    .then((data) => {
-            setRecipes(data);
-            setLoading(false);
-        })
-    .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-    });
-    }, []);
-    if (loading) {
-        return <p>Loading recipes...</p>;
-    }
-    if (error) {
-        return <p>{error}</p>;
-    }
 
+        const fetchRecipes = () => {
+        setLoading(true);
+        setError("");
+        fetch("http://localhost:5000/api/recipes")
+            .then((response) => {
+                if (!response.ok){
+                    throw new Error("Could not fetch recipes")
+                }
+                return response.json()
+        })        
+        .then((data) => {
+                setRecipes(data);
+                setLoading(false);
+            })
+        .catch((error) => {
+            setError(error.message);
+            setLoading(false);
+        });
+    };
+    fetchRecipes();
+
+    const intervalId = setInterval(fetchRecipes, 10000);
+    return () => clearInterval(intervalId);
+
+    }, [recipeRefresh]);
     //--------------------------
     // DELETE RECIPE
     //--------------------------
@@ -137,7 +140,7 @@ function RecipeList() {
                         ingredients: recipe.ingredients.map((item) => ({
                         ingredientId: item.ingredientId?._id,
                         amount: item.amount}))});}}>Edit</button>
-                        
+
                     <button onClick={() => handleDelete(recipe._id)}>Delete</button>
                     
                        </div>

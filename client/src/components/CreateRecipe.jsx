@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 
-function CreateRecipe({ user, ingredientRefresh }) {
+function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
     const [title, setTitle] = useState("");
     const [instructions, setInstructions] = useState("");
     const [servings, setServings] = useState(1);
-
-    const [ingredientId, setIngredientId] = useState("");
     const [ingredientsList, setIngredientsList] = useState([]);
-    const [amount, setAmount] = useState(1);
-
+    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredientId: "", amount: 0 }]);
     useEffect(() => {
         const fetchIngredients = async () => {
         try {
@@ -22,6 +19,9 @@ function CreateRecipe({ user, ingredientRefresh }) {
 
         fetchIngredients();
     }, [ingredientRefresh]);
+
+
+
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,12 +36,7 @@ function CreateRecipe({ user, ingredientRefresh }) {
                         instructions,
                         servings,
                         userId: user._id,
-                        ingredients: [
-                            {
-                                ingredientId,
-                                amount
-                            }
-                        ]
+                        ingredients: recipeIngredients
                     }),
                 });
                 const data = await response.json();
@@ -51,12 +46,28 @@ function CreateRecipe({ user, ingredientRefresh }) {
                 }
 
                 console.log("Recipe created: ", data);
+                onRecipeCreated();
             } catch (error){
                 console.error(error.message);
             }
             }
 
-    
+    const addIngredientRow = () => {
+        setRecipeIngredients([
+            ...recipeIngredients,
+            { ingredientId: "", amount: 0 }
+        ]);
+        };
+
+        const updateIngredientRow = (index, field, value) => {
+            const updated = [...recipeIngredients];
+            updated[index][field] = field === "amount" ? Number(value) : value;
+            setRecipeIngredients(updated);
+            };
+
+        const removeIngredientRow = (index) => {
+            setRecipeIngredients(recipeIngredients.filter((_, i) => i !== index));
+        };
 
     return(
         <div>
@@ -75,18 +86,42 @@ function CreateRecipe({ user, ingredientRefresh }) {
             </div>
 
             <p>Recipe will be created by: {user.name}</p>
-                <select value={ingredientId} onChange={(e) => setIngredientId(e.target.value)}>
-                <option value="">Select ingredient</option>
-                {ingredientsList.map((ingredient) => (
-                    <option key={ingredient._id} value={ingredient._id}>
-                    {ingredient.name}
-                    </option>
-                ))}
-            </select>
+            {recipeIngredients.map((item, index) => (
+                <div key={index}>
+                    <select
+                    value={item.ingredientId}
+                    onChange={(e) =>
+                        updateIngredientRow(index, "ingredientId", e.target.value)
+                    }
+                    >
+                    <option value="">Select ingredient</option>
+                    {ingredientsList.map((ingredient) => (
+                        <option key={ingredient._id} value={ingredient._id}>
+                        {ingredient.name}
+                        </option>
+                    ))}
+                    </select>
 
-            <div>
-                <input type="number" placeholder="Amount (grams)" value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
-            </div>
+                    <input
+                    type="number"
+                    placeholder="Amount (grams)"
+                    value={item.amount}
+                    onChange={(e) =>
+                        updateIngredientRow(index, "amount", e.target.value)
+                    }
+                    />
+
+                    <button type="button" onClick={() => removeIngredientRow(index)}>
+                    Remove
+                    </button>
+                </div>
+                ))}
+
+                <button type="button" onClick={addIngredientRow}>
+                Add ingredient
+                </button>
+
+
                 <button type="submit">Create</button>
         </form>
         </div>
