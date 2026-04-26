@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function CreateRecipe({ user }) {
+function CreateRecipe({ user, ingredientRefresh }) {
     const [title, setTitle] = useState("");
     const [instructions, setInstructions] = useState("");
     const [servings, setServings] = useState(1);
@@ -21,7 +21,7 @@ function CreateRecipe({ user }) {
         };
 
         fetchIngredients();
-    }, []);
+    }, [ingredientRefresh]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
