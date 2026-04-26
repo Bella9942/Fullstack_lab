@@ -3,12 +3,14 @@ import RecipeList from "./components/RecipeList";
 import CreateRecipe from "./components/CreateRecipe";
 import Login from "./components/Login";
 import CreateIngredient from "./components/CreateIngredient";
+import IngredientList from "./components/IngredientList";
 
 function App() {
   const [user, setUser] = useState(null);
   const [ingredientRefresh, setIngredientRefresh] = useState(0);
 
   const refreshIngredients = () => {
+    console.log("refreshIngredients called");
     setIngredientRefresh((prev) => prev + 1);
   };
   useEffect(() => {
@@ -35,7 +37,7 @@ function App() {
             <button onClick={handleLogout}>Logout</button>
           <CreateIngredient onIngredientCreated={refreshIngredients} />
           <CreateRecipe user={user} ingredientRefresh={ingredientRefresh} />
-          <CreateRecipe user={user} />
+          <IngredientList ingredientRefresh={ingredientRefresh} onIngredientChanged={refreshIngredients} />
           <RecipeList />
         </div>
       );
