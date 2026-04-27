@@ -28,6 +28,8 @@ Make sure you have installed:
 
 
 ## Installation
+
+Start by cloning the repository
 Install dependencies for the entire project:
 ```
 npm install
@@ -52,7 +54,7 @@ node seed/seedRecipes.js
 This will populate the database with realistic data.
 
 ## Run the Application
-Start both frontend and backend with one command:
+Start both frontend and backend with one command back in root directory:
 ```
 npm run dev
 ```
