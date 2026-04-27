@@ -108,7 +108,7 @@ function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
                     }
                     />
 
-                    <button class= "delete-btn" type="button" onClick={() => removeIngredientRow(index)}>Remove</button>
+                    <button className= "delete-btn" type="button" onClick={() => removeIngredientRow(index)}>Remove</button>
                 </div>
                 ))}
 

@@ -105,7 +105,10 @@ function RecipeList({ recipeRefresh }) {
         <div>
             <h2>Recipes</h2>
             <input type="text" placeholder="Search recipes..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            {loading && <p>Loading recipes...</p>}
+            {error && <p>{error}</p>}
             
+            {!loading && !error && (
             <div className="recipe-grid">
             {recipes.filter((recipe) =>
                 recipe.title.toLowerCase().includes(search.toLowerCase())
@@ -114,28 +117,28 @@ function RecipeList({ recipeRefresh }) {
 
                 {editingId === recipe._id ? (
       
-        <div>
-            <input value={editData.title}
-            onChange={(e) =>
-                setEditData({ ...editData, title: e.target.value })
-            }/>
+                <div>
+                    <input value={editData.title}
+                    onChange={(e) =>
+                        setEditData({ ...editData, title: e.target.value })
+                    }/>
 
-            <input type="number" value={editData.servings}
-            onChange={(e) =>
-                setEditData({
-                ...editData,
-                servings: Number(e.target.value),
-                })
-            }/>
+                    <input type="number" value={editData.servings}
+                    onChange={(e) =>
+                        setEditData({
+                        ...editData,
+                        servings: Number(e.target.value),
+                        })
+                    }/>
 
-            <input value={editData.instructions}
-            onChange={(e) =>
-                setEditData({ ...editData, instructions: e.target.value })
-            }/>
+                    <input value={editData.instructions}
+                    onChange={(e) =>
+                        setEditData({ ...editData, instructions: e.target.value })
+                    }/>
 
-            <button onClick={() => handleUpdate(recipe._id)}>Save</button>
-            <button onClick={() => setEditingId(null)}>Cancel</button>
-        </div>
+                    <button onClick={() => handleUpdate(recipe._id)}>Save</button>
+                    <button onClick={() => setEditingId(null)}>Cancel</button>
+                </div>
 
         ) : (
                 <div key={recipe._id}>
@@ -147,7 +150,7 @@ function RecipeList({ recipeRefresh }) {
                     <p>Carbs: {recipe.totalCarbs}</p>
                     <p>Fat: {recipe.totalFat}</p> 
                     <p>Created by: {recipe.userId?.name}</p>
-                    <button class= "edit-btn"onClick={() => {
+                    <button className= "edit-btn"onClick={() => {
                         setEditingId(recipe._id);
                         setEditData({
                         ...recipe,
@@ -156,16 +159,18 @@ function RecipeList({ recipeRefresh }) {
                         ingredientId: item.ingredientId?._id,
                         amount: item.amount}))});}}>Edit</button>
 
-                    <button class = "delete-btn" onClick={() => handleDelete(recipe._id)}>Delete</button>
+                    <button className = "delete-btn" onClick={() => handleDelete(recipe._id)}>Delete</button>
                     
                     </div>
                     
                 )}
             </div>
             ))}
-        </div>
+            </div>
+            )}
         </div>
         );
+        
     }
                 
 

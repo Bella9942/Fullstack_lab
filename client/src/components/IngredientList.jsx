@@ -160,14 +160,14 @@ return (
               <p>Carbs: {ingredient.carbsPer100g}g</p>
               <p>Fat: {ingredient.fatPer100g}g</p>
 
-              <button class="edit-btn"
+              <button className="edit-btn"
                 onClick={() => {
                   setEditingId(ingredient._id);
                   setEditData(ingredient);
                 }}
               >Edit</button>
 
-              <button class = "delete-btn" onClick={() => handleDelete(ingredient._id)}>Delete</button>
+              <button className = "delete-btn" onClick={() => handleDelete(ingredient._id)}>Delete</button>
             </div>
           )}
         </div>
