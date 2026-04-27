@@ -29,7 +29,7 @@ Make sure you have installed:
 
 ## Installation
 
-Start by cloning the repository
+Start by cloning the repository.
 Install dependencies for the entire project:
 ```
 npm install
