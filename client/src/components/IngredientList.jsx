@@ -5,7 +5,10 @@ function IngredientList({ingredientRefresh, onIngredientChanged}) {
     const [editingId, setEditingId] = useState(null);
     const [editData, setEditData] = useState({});
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
-
+    
+    //--------------------------
+    // FETCH INGREDIENTS
+    //--------------------------
     const fetchIngredients = async () => {
         try {
             const response = await fetch("http://localhost:5000/api/ingredients");
@@ -25,6 +28,9 @@ function IngredientList({ingredientRefresh, onIngredientChanged}) {
         fetchIngredients();
     }, [ingredientRefresh]);
 
+    //--------------------------
+    // DELETE RECIPE
+    //--------------------------
     const handleDelete = async (id) => {
         try {
             const response = await fetch(`http://localhost:5000/api/ingredients/${id}`, {
@@ -44,6 +50,9 @@ function IngredientList({ingredientRefresh, onIngredientChanged}) {
             }
             };
 
+    //--------------------------
+    // UPDATE INGREDIENTS
+    //--------------------------
 const handleUpdate = async (id) => {
   try {
     const response = await fetch(
@@ -107,9 +116,7 @@ return (
                 }
               />
 
-              <input
-                type="number"
-                value={editData.caloriesPer100g}
+              <input type="number" value={editData.caloriesPer100g}
                 onChange={(e) =>
                   setEditData({
                     ...editData,
@@ -118,9 +125,7 @@ return (
                 }
               />
 
-              <input
-                type="number"
-                value={editData.proteinPer100g}
+              <input type="number" value={editData.proteinPer100g}
                 onChange={(e) =>
                   setEditData({
                     ...editData,
@@ -129,35 +134,23 @@ return (
                 }
               />
 
-              <input
-                type="number"
-                value={editData.carbsPer100g}
+              <input type="number" value={editData.carbsPer100g}
                 onChange={(e) =>
                   setEditData({
                     ...editData,
                     carbsPer100g: Number(e.target.value),
                   })
-                }
-              />
+                }/>
 
-              <input
-                type="number"
-                value={editData.fatPer100g}
+              <input type="number" value={editData.fatPer100g}
                 onChange={(e) =>
                   setEditData({
                     ...editData,
                     fatPer100g: Number(e.target.value),
                   })
-                }
-              />
-
-              <button onClick={() => handleUpdate(ingredient._id)}>
-                Save
-              </button>
-
-              <button onClick={() => setEditingId(null)}>
-                Cancel
-              </button>
+                }/>
+              <button onClick={() => handleUpdate(ingredient._id)}>Save</button>
+              <button onClick={() => setEditingId(null)}>Cancel</button>
             </div>
           ) : (
             <div>
@@ -167,18 +160,14 @@ return (
               <p>Carbs: {ingredient.carbsPer100g}g</p>
               <p>Fat: {ingredient.fatPer100g}g</p>
 
-              <button
+              <button class="edit-btn"
                 onClick={() => {
                   setEditingId(ingredient._id);
                   setEditData(ingredient);
                 }}
-              >
-                Edit
-              </button>
+              >Edit</button>
 
-              <button onClick={() => handleDelete(ingredient._id)}>
-                Delete
-              </button>
+              <button class = "delete-btn" onClick={() => handleDelete(ingredient._id)}>Delete</button>
             </div>
           )}
         </div>

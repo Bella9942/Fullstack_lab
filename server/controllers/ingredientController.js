@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Ingredient = require("../models/Ingredient");
 
+    //--------------------------
+    // GET ALL INGREDIENTS
+    //--------------------------
 const getAllIngredients = async (req, res) => {
     try{
         const ingredients = await Ingredient.find();
@@ -13,6 +16,10 @@ const getAllIngredients = async (req, res) => {
         return res.status(500).json({error: error.message});
     }
 };
+
+    //--------------------------
+    // GET INGREDIENTS
+    //--------------------------
 
 const getIngredientById = async (req, res) => {
     try {
@@ -31,6 +38,9 @@ const getIngredientById = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 };
+    //--------------------------
+    // CREATE INGREDIENTS
+    //--------------------------
 
 const createIngredient = async (req, res) => {
     try{
@@ -49,6 +59,9 @@ const createIngredient = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // UPDATE INGREDIENTS
+    //--------------------------
 const updateIngredient = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -78,6 +91,9 @@ const updateIngredient = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // DELETE INGREDIENTS
+    //--------------------------
 const deleteIngredient = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {

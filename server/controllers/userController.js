@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
+    //--------------------------
+    // GET RECIPE
+    //--------------------------
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -15,6 +18,9 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // CREATE USER
+    //--------------------------
 const createUser = async (req, res) => {
     try {
         const { name, email } = req.body;

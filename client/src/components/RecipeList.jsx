@@ -9,6 +9,10 @@ function RecipeList({ recipeRefresh }) {
     const [editData, setEditData] = useState({});
 
     const [search, setSearch] = useState("");
+
+    //--------------------------
+    // FETCH RECIPE
+    //--------------------------
     
     useEffect(() => {
 
@@ -37,6 +41,7 @@ function RecipeList({ recipeRefresh }) {
     return () => clearInterval(intervalId);
 
     }, [recipeRefresh]);
+
     //--------------------------
     // DELETE RECIPE
     //--------------------------
@@ -61,6 +66,10 @@ function RecipeList({ recipeRefresh }) {
             alert(error.message);
         }
         };
+
+    //--------------------------
+    // UPDATE RECIPE
+    //--------------------------
 
     const handleUpdate = async (id) => {
         try {
@@ -91,14 +100,17 @@ function RecipeList({ recipeRefresh }) {
         }
         };
 
+
     return (
         <div>
             <h2>Recipes</h2>
             <input type="text" placeholder="Search recipes..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            
+            <div className="recipe-grid">
             {recipes.filter((recipe) =>
                 recipe.title.toLowerCase().includes(search.toLowerCase())
             ).map((recipe) => (
-            <div key={recipe._id}>
+            <div className="recipe-card" key={recipe._id}>
 
                 {editingId === recipe._id ? (
       
@@ -106,8 +118,7 @@ function RecipeList({ recipeRefresh }) {
             <input value={editData.title}
             onChange={(e) =>
                 setEditData({ ...editData, title: e.target.value })
-            }
-            />
+            }/>
 
             <input type="number" value={editData.servings}
             onChange={(e) =>
@@ -115,14 +126,12 @@ function RecipeList({ recipeRefresh }) {
                 ...editData,
                 servings: Number(e.target.value),
                 })
-            }
-            />
+            }/>
 
             <input value={editData.instructions}
             onChange={(e) =>
                 setEditData({ ...editData, instructions: e.target.value })
-            }
-            />
+            }/>
 
             <button onClick={() => handleUpdate(recipe._id)}>Save</button>
             <button onClick={() => setEditingId(null)}>Cancel</button>
@@ -131,13 +140,14 @@ function RecipeList({ recipeRefresh }) {
         ) : (
                 <div key={recipe._id}>
                     <h3>{recipe.title}</h3>
+                    <p>Instructions: {recipe.instructions}</p>
                     <p>Servings: {recipe.servings}</p>
                     <p>Calories: {recipe.totalCalories}</p> 
                     <p>Protein: {recipe.totalProtein}</p>
                     <p>Carbs: {recipe.totalCarbs}</p>
                     <p>Fat: {recipe.totalFat}</p> 
                     <p>Created by: {recipe.userId?.name}</p>
-                    <button onClick={() => {
+                    <button class= "edit-btn"onClick={() => {
                         setEditingId(recipe._id);
                         setEditData({
                         ...recipe,
@@ -146,15 +156,17 @@ function RecipeList({ recipeRefresh }) {
                         ingredientId: item.ingredientId?._id,
                         amount: item.amount}))});}}>Edit</button>
 
-                    <button onClick={() => handleDelete(recipe._id)}>Delete</button>
+                    <button class = "delete-btn" onClick={() => handleDelete(recipe._id)}>Delete</button>
                     
-                       </div>
+                    </div>
+                    
                 )}
             </div>
             ))}
         </div>
+        </div>
         );
-        }
+    }
                 
 
 

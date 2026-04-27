@@ -31,7 +31,7 @@ function Login({ setUser }) {
     };
 
   return (
-    <div>
+    <div className="app">
       <h2>Login / Signup</h2>
 
       <form onSubmit={handleLogin}>

@@ -5,7 +5,8 @@ function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
     const [instructions, setInstructions] = useState("");
     const [servings, setServings] = useState(1);
     const [ingredientsList, setIngredientsList] = useState([]);
-    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredientId: "", amount: 0 }]);
+    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredientId: "", amount: "" }]);
+
     useEffect(() => {
         const fetchIngredients = async () => {
         try {
@@ -45,7 +46,7 @@ function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
                     throw new Error(data.error || "Something went wrong");
                 }
 
-                console.log("Recipe created: ", data);
+                window.alert("Recipe created");
                 onRecipeCreated();
             } catch (error){
                 console.error(error.message);
@@ -55,13 +56,13 @@ function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
     const addIngredientRow = () => {
         setRecipeIngredients([
             ...recipeIngredients,
-            { ingredientId: "", amount: 0 }
+            { ingredientId: "", amount: "" }
         ]);
         };
 
         const updateIngredientRow = (index, field, value) => {
             const updated = [...recipeIngredients];
-            updated[index][field] = field === "amount" ? Number(value) : value;
+            updated[index][field] = field === "amount" ? (value === "" ? "" : Number(value)) : value;
             setRecipeIngredients(updated);
             };
 
@@ -84,8 +85,7 @@ function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
             <div>
             <input type="number" placeholder="Servings" value={servings} onChange={(e) => setServings(Number(e.target.value))}/>
             </div>
-
-            <p>Recipe will be created by: {user.name}</p>
+            
             {recipeIngredients.map((item, index) => (
                 <div key={index}>
                     <select
@@ -102,25 +102,17 @@ function CreateRecipe({ user, ingredientRefresh, onRecipeCreated  }) {
                     ))}
                     </select>
 
-                    <input
-                    type="number"
-                    placeholder="Amount (grams)"
-                    value={item.amount}
+                    <input type="number" placeholder="Amount (grams)" value={item.amount}
                     onChange={(e) =>
                         updateIngredientRow(index, "amount", e.target.value)
                     }
                     />
 
-                    <button type="button" onClick={() => removeIngredientRow(index)}>
-                    Remove
-                    </button>
+                    <button class= "delete-btn" type="button" onClick={() => removeIngredientRow(index)}>Remove</button>
                 </div>
                 ))}
 
-                <button type="button" onClick={addIngredientRow}>
-                Add ingredient
-                </button>
-
+                <button type="button" onClick={addIngredientRow}>Add ingredient</button>
 
                 <button type="submit">Create</button>
         </form>

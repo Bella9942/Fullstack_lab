@@ -3,6 +3,9 @@ const Recipe = require("../models/Recipe");
 const Ingredient = require("../models/Ingredient");
 require("../models/User");
 
+    //--------------------------
+    // CALCULATE NUTRITION
+    //--------------------------
 const calculateNutrition = async (ingredients) => {
     let totalCalories = 0;
     let totalProtein = 0;
@@ -30,6 +33,10 @@ const calculateNutrition = async (ingredients) => {
         totalFat: Math.round(totalFat)
     };      
 }
+
+    //--------------------------
+    // VALIDATE RECIPE
+    //--------------------------
 
 const validateRecipeInput = (body) => {
     const {
@@ -73,6 +80,9 @@ const validateRecipeInput = (body) => {
     return null;
 };
 
+    //--------------------------
+    // GET ALL RECIPE
+    //--------------------------
 const getAllRecipes = async (req, res) => {
     try {
         const filter = {};
@@ -91,6 +101,9 @@ const getAllRecipes = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // GET RECIPE
+    //--------------------------
 const getRecipeById = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -121,6 +134,9 @@ const getRecipeById = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // CREATE RECIPE
+    //--------------------------
 const createRecipe = async (req, res) => {
     try {
         const validationError = validateRecipeInput(req.body);
@@ -150,6 +166,10 @@ const createRecipe = async (req, res) => {
        return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+    //--------------------------
+    // UPDATE RECIPE
+    //--------------------------
 
 const updateRecipe = async (req, res) => {
     try {
@@ -190,6 +210,9 @@ const updateRecipe = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // DELETE RECIPE
+    //--------------------------
 const deleteRecipe = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -209,6 +232,9 @@ const deleteRecipe = async (req, res) => {
 };
 
 
+    //--------------------------
+    // GET RECIPE INGREDIENTS
+    //--------------------------
 const getRecipeIngredients = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -228,6 +254,9 @@ const getRecipeIngredients = async (req, res) => {
     }
 };
 
+    //--------------------------
+    // GET RECIPE BY USER
+    //--------------------------
 const getRecipesByUser = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {

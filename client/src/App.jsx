@@ -4,6 +4,7 @@ import CreateRecipe from "./components/CreateRecipe";
 import Login from "./components/Login";
 import CreateIngredient from "./components/CreateIngredient";
 import IngredientList from "./components/IngredientList";
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -15,7 +16,6 @@ function App() {
   };
 
   const refreshIngredients = () => {
-    console.log("refreshIngredients called");
     setIngredientRefresh((prev) => prev + 1);
   };
   useEffect(() => {
@@ -35,15 +35,22 @@ function App() {
      return <Login setUser={setUser} />;
     }
       return (
-        <div>
+        <div className="app">
+          <div className="header">
             <h1>Recipe Nutrion planner</h1>
             <p>Logged in as: {user?.name || "Unknown user"}</p>
-
             <button onClick={handleLogout}>Logout</button>
+          </div>
+              <div className="top-section">
+          <div className="panel">
           <CreateIngredient onIngredientCreated={refreshIngredients} />
-          <CreateRecipe user={user} ingredientRefresh={ingredientRefresh} onRecipeCreated={refreshRecipes}/>
+          <IngredientList ingredientRefresh={ingredientRefresh} onIngredientChanged={refreshIngredients} />       
+          </div>
+          <div className="panel">
+            <CreateRecipe user={user} ingredientRefresh={ingredientRefresh} onRecipeCreated={refreshRecipes}/>
+          </div>
+        </div>
 
-          <IngredientList ingredientRefresh={ingredientRefresh} onIngredientChanged={refreshIngredients} />
           <RecipeList recipeRefresh={recipeRefresh} />
         </div>
       );
