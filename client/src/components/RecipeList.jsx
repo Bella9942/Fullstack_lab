@@ -8,6 +8,8 @@ function RecipeList({ recipeRefresh }) {
     const [editingId, setEditingId] = useState(null);
     const [editData, setEditData] = useState({});
 
+    const [search, setSearch] = useState("");
+    
     useEffect(() => {
 
         const fetchRecipes = () => {
@@ -92,8 +94,11 @@ function RecipeList({ recipeRefresh }) {
     return (
         <div>
             <h2>Recipes</h2>
-            {recipes.map((recipe) =>(
-              <div key={recipe._id}>
+            <input type="text" placeholder="Search recipes..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            {recipes.filter((recipe) =>
+                recipe.title.toLowerCase().includes(search.toLowerCase())
+            ).map((recipe) => (
+            <div key={recipe._id}>
 
                 {editingId === recipe._id ? (
       
