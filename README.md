@@ -1,30 +1,31 @@
 # Recipe Nutrition Planner
+
 A fullstack web application for creating and managing recipes with automatically calculated nutritional values. Each recipe is linked to a user and consists of multiple ingredients.
----
 
 ## Problem Statement
+
 This application helps users easily create recipes and calculate their nutritional values based on selected ingredients.
----
+
 
 ## Tech Stack
 - Frontend: React (Vite)
 - Backend: Express.js
 - Database: MongoDB Atlas (via Mongoose)
 - Tools: concurrently, nodemon
----
+
 
 ## Project Structure
 - client/ → React frontend (components, UI)
 - server/ → Express backend (routes, controllers, models)
----
+
 
 ## Requirements
 Make sure you have installed:
 - Node.js (v18 or higher recommended)
 - npm
 
-All other dependencies (React, Express, Vite, etc.) are installed automatically.
----
+> All other dependencies (React, Express, Vite, etc.) are installed automatically.
+
 
 ## Installation
 Install dependencies for the entire project:
@@ -33,7 +34,6 @@ npm install
 npm install --prefix server
 npm install --prefix client
 ```
----
 
 ## Environment Variables
 Create a .env file inside the /server folder:
