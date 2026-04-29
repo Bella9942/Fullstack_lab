@@ -89,7 +89,7 @@ const getAllRecipes = async (req, res) => {
         if (req.query.title) {
             filter.title = { $regex: req.query.title, $options: "i" };
         }
-        const recipes = await Recipe.find(filter).populate("ingredients.ingredientId").populate("userId");
+        const recipes = await Recipe.find(filter).populate("ingredients.ingredientId");
 
         if (!recipes.length) {
             return res.status(404).json({ error: "No recipes found" });
@@ -111,8 +111,7 @@ const getRecipeById = async (req, res) => {
         }
 
         const recipe = await Recipe.findById(req.params.id)
-            .populate("ingredients.ingredientId")
-            .populate("userId");
+            .populate("ingredients.ingredientId");
 
         if (!recipe) {
             return res.status(404).json({ error: "Recipe not found" });

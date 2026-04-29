@@ -149,7 +149,7 @@ function RecipeList({ recipeRefresh }) {
                     <p>Protein: {recipe.totalProtein}</p>
                     <p>Carbs: {recipe.totalCarbs}</p>
                     <p>Fat: {recipe.totalFat}</p> 
-                    <p>Created by: {recipe.userId?.name}</p>
+                    <p>Created by: {recipe.userId}</p>
                     <button className= "edit-btn"onClick={() => {
                         setEditingId(recipe._id);
                         setEditData({
